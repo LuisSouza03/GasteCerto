@@ -12,18 +12,17 @@ class AuthService {
     async signInUser(email, password) {
         const user = await UserRepository.findUserByEmail(email);
         if (!user) {
-            throw new Error('Usuário não encontrado.');
+            return false;
         }
 
-        const correctPassword = await bcrypt.compare(password, user.password);
-        if (!correctPassword) {
-            // Colocamos email ou senha, pois caso não seja a pessoa tentando acessar esta conta
-            // Ficara mais dificil para saber se é o email ou senha inválidos. 
-            throw new Error('Email ou senha incorreta.')
+        const isCorrectPassword = await bcrypt.compare(password, user.password);
+        if (!isCorrectPassword) {
+            return false;
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-        return { user, token };
+        // var privateKey = fs.readFileSync('private.key');
+        // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        return { user };
     }
 }
 
