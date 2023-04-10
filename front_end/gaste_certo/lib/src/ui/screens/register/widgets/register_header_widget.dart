@@ -22,7 +22,6 @@ class RegisterAccountHeader extends StatelessWidget {
                   const Text(
                     "GasteCerto",
                     style: TextStyle(
-                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
                     ),
@@ -42,14 +41,32 @@ class RegisterAccountHeader extends StatelessWidget {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
-          child: Text(
-            "Crie sua conta",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
+        Center(
+          child: Column(
+            children: const [
+              Padding(
+                padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                child: Text(
+                  "Crie sua conta",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 30,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: Text(
+                  "Crie sua conta com suas informações, para ter acesso ao app.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 90, 83, 83),
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
