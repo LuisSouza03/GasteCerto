@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../business/controllers/register_account_controller.dart';
 import '../../../../business/validation/validation_form.dart';
+import '../../../widgets/button_widget.dart';
 import '../../../widgets/custom_textfield.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -53,6 +54,19 @@ class _RegisterFormState extends State<RegisterForm> {
               textController: controller.password,
               validator: (value) =>
                   validationFunctions.validatePassword(value!, controller),
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: ButtonWidget(
+                  textButton: "Registrar",
+                  onPress: () {
+                    if (formKey.currentState!.validate()) {
+                      Get.to(
+                        () => const RegisterForm(),
+                      );
+                    }
+                  }),
             ),
           ],
         ),
