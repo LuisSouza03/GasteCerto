@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gaste_certo/src/ui/screens/register/register_screen.dart';
+import 'package:gaste_certo/src/ui/screens/login/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Flutter Demo',
-      home: RegisterAccountScreen(),
+      home: LoginAccountScreen(),
     );
   }
 }
