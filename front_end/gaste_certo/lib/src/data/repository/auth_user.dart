@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:gaste_certo/src/data/repository/auth_repository.dart';
 import 'package:gaste_certo/src/domain/models/user_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import '../../ui/screens/home/home_screen.dart';
 import '../../utils/constants/constants.dart';
+import '../../utils/utils.dart';
 
 class AuthenticationRepository extends GetxController
     implements ApiAuthRepository {
@@ -16,26 +19,31 @@ class AuthenticationRepository extends GetxController
   }) async {
     try {
       final Map<String, String> data = {
-        'nome': email,
+        'email': email,
         'password': password,
       };
 
       final response = await http.post(
         Uri.parse('http://192.168.0.247:8000/auth/login'),
-        body: jsonEncode(data), // converter o Map em JSON
+        body: jsonEncode(data),
         headers: {
-          'Content-Type': 'application/json', // definir o tipo de conteúdo
+          'Content-Type': 'application/json',
         },
       );
 
-      if (response.statusCode == 200) {
-        var x = response.body;
+      if (response.statusCode == 201) {
+        Get.offAll(() => const HomeScreen());
       } else {
-        var message = response.body;
+        Map<String, dynamic> message = jsonDecode(response.body);
+        var errorMessage = message['message'];
+
+        exceptionFirebaseSnackBar(
+          message: errorMessage,
+          title: "Login",
+          backgroundColor: Colors.red,
+        );
       }
-    } catch (e) {
-      throw UnimplementedError();
-    }
+    } catch (e) {}
   }
 
   @override
@@ -55,5 +63,20 @@ class AuthenticationRepository extends GetxController
       if (response.statusCode == 200) {}
     } catch (e) {}
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> exceptionFirebaseSnackBar(
+      {required String message,
+      required String title,
+      required Color backgroundColor}) async {
+    Utils().showSnackBar(
+      title: title,
+      message: message,
+      icon: Icons.error_outline_outlined,
+      iconColor: Colors.white,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+    );
   }
 }
