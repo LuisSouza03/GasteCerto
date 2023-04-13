@@ -17,6 +17,8 @@ class LoginAccountForm extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final controller = Get.put(RegisterAccountController());
     ValidationFunctions validationFunctions = ValidationFunctions();
+    AuthenticationRepository authenticationRepository =
+        Get.put(AuthenticationRepository());
 
     return Form(
       key: formKey,
