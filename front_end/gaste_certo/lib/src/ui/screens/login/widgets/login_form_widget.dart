@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gaste_certo/src/ui/screens/register/register_screen.dart';
 import 'package:get/get.dart';
 
 import '../../../../business/controllers/register_account_controller.dart';
@@ -62,6 +63,16 @@ class LoginAccountForm extends StatelessWidget {
                     );
                   }
                 },
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () => Get.to(() => const RegisterAccountScreen()),
+                child: const Text(
+                  "Registre-se aqui",
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ),
           ],

@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gaste_certo/src/data/repository/auth_repository.dart';
 import 'package:gaste_certo/src/domain/models/user_model.dart';
+import 'package:gaste_certo/src/ui/screens/login/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../ui/screens/home/home_screen.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/utils.dart';
 
 class AuthenticationRepository extends GetxController
@@ -51,16 +51,29 @@ class AuthenticationRepository extends GetxController
     required RegisterAccountModel registerModel,
   }) async {
     try {
-      var url = Uri.parse('${ApiConstants.baseUrlAuthApi}login').replace(
-        queryParameters: {
-          'nome': registerModel.name,
-          'email': registerModel.email,
-          'password': registerModel.password
+      final Map<String, String> data = {
+        "nome": registerModel.name,
+        "email": registerModel.email,
+        "password": registerModel.password
+      };
+
+      final response = await http.post(
+        Uri.parse('http://192.168.0.247:8000/auth/cadastrar'),
+        body: jsonEncode(data),
+        headers: {
+          'Content-Type': 'application/json',
         },
       );
 
-      var response = await http.get(url);
-      if (response.statusCode == 200) {}
+      if (response.statusCode == 201) {
+        Get.to(() => const LoginAccountScreen());
+
+        exceptionFirebaseSnackBar(
+          message: "Registro feito com suceesso, logue com sua conta.",
+          title: "Login",
+          backgroundColor: Colors.green,
+        );
+      }
     } catch (e) {}
     throw UnimplementedError();
   }
