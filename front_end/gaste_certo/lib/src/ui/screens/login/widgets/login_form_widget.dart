@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../business/controllers/register_account_controller.dart';
 import '../../../../business/validation/validation_form.dart';
+import '../../../../data/repository/auth_user.dart';
 import '../../../widgets/button_widget.dart';
 import '../../../widgets/custom_textfield.dart';
 
@@ -53,10 +54,10 @@ class LoginAccountForm extends StatelessWidget {
                 textButton: "Login",
                 onPress: () {
                   if (formKey.currentState!.validate()) {
-                    // AuthenticationRepository.instance.loginWithEmailAndPassword(
-                    //   email: controller.email.text.trim(),
-                    //   password: controller.password.text.trim(),
-                    // );
+                    AuthenticationRepository.instance.loginUser(
+                      email: controller.email.text.trim(),
+                      password: controller.password.text.trim(),
+                    );
                   }
                 },
               ),
