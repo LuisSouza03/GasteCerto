@@ -15,8 +15,8 @@ class AuthenticationRepository extends GetxController
     try {
       var url = Uri.parse('${ApiConstants.baseUrlAuthApi}login').replace(
         queryParameters: {
-          'usuario': email,
-          'senha': password,
+          'nome': email,
+          'password': password,
         },
       );
 
@@ -28,8 +28,21 @@ class AuthenticationRepository extends GetxController
   }
 
   @override
-  Future<void> registerUser({required RegisterAccountModel registerModel}) {
-    // TODO: implement registerUser
+  Future<void> registerUser({
+    required RegisterAccountModel registerModel,
+  }) async {
+    try {
+      var url = Uri.parse('${ApiConstants.baseUrlAuthApi}login').replace(
+        queryParameters: {
+          'nome': registerModel.name,
+          'email': registerModel.email,
+          'password': registerModel.password
+        },
+      );
+
+      var response = await http.get(url);
+      if (response.statusCode == 200) {}
+    } catch (e) {}
     throw UnimplementedError();
   }
 }

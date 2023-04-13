@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gaste_certo/src/domain/models/user_model.dart';
 import 'package:get/get.dart';
 
 import '../../../../business/controllers/register_account_controller.dart';
 import '../../../../business/validation/validation_form.dart';
+import '../../../../data/repository/auth_user.dart';
 import '../../../widgets/button_widget.dart';
 import '../../../widgets/custom_textfield.dart';
 
@@ -62,8 +64,14 @@ class _RegisterFormState extends State<RegisterForm> {
                   textButton: "Registrar",
                   onPress: () {
                     if (formKey.currentState!.validate()) {
-                      Get.to(
-                        () => const RegisterForm(),
+                      final RegisterAccountModel user = RegisterAccountModel(
+                        email: controller.email.text.trim(),
+                        name: controller.fullName.text.trim(),
+                        password: controller.password.text.trim(),
+                      );
+
+                      AuthenticationRepository.instance.registerUser(
+                        registerModel: user,
                       );
                     }
                   }),
