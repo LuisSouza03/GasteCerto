@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gaste_certo/src/ui/screens/login/login_screen.dart';
 import 'package:get/get.dart';
 
+import '../addScreen/abas_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -108,7 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             Padding(
                               padding: EdgeInsets.only(right: width * 0.04),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const AbasScreen(),
+                                    ),
+                                  );
+                                },
                                 child: Container(
                                   width: width * 0.12,
                                   height: width * 0.12,
