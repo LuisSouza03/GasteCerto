@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/authRoutes');
+const receitaRoutes = require('./routes/receitasRoutes');
+const despesasRoutes = require('./routes/despesasRoutes');
 
 mongoose.connect('mongodb+srv://luis93667:YaorQp5PJFbTSIRs@gastecerto.koxqj2v.mongodb.net/?retryWrites=true&w=majority')
     .then(
@@ -14,7 +16,8 @@ const app = express();
 
 app.use(express.json());
 app.use('/auth', routes);
-app.use('/receitas', routes);
+app.use('/receitas', receitaRoutes);
+app.use('/despesas', despesasRoutes);
 
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'API Funcionando' })
