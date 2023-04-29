@@ -111,6 +111,7 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
           title: "Receitas",
           backgroundColor: Colors.green,
         );
+        Get.back();
       } else {
         Map<String, dynamic> message = jsonDecode(response.body);
         var errorMessage = message['message'];
