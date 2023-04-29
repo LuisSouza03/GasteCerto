@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gaste_certo/src/data/repository/receitas_repository.dart';
-import 'package:gaste_certo/src/domain/models/receitas_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../../utils/utils.dart';
+import '../../../domain/models/despesas_model.dart';
+import '../../../utils/utils.dart';
+import 'despesas_repository.dart';
 
-class ReceitasApi extends GetxController implements ApiReceitasRepository {
-  static ReceitasApi get instance => Get.find();
+class DespesasApi extends GetxController implements ApiDespesasRepository {
+  static DespesasApi get instance => Get.find();
 
   @override
   Future<void> exceptionFirebaseSnackBar(
@@ -26,14 +26,14 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
   }
 
   @override
-  Future<void> deleteReceitas({required String id}) async {
+  Future<void> deleteDespesas({required String id}) async {
     try {
       final Map<String, dynamic> data = {
         "id": id,
       };
 
       final response = await http.delete(
-        Uri.parse('http://192.168.0.247:8000/receitas/adicionar'),
+        Uri.parse('http://192.168.0.247:8000/despesas/adicionar'),
         body: jsonEncode(data),
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
 
         exceptionFirebaseSnackBar(
           message: message,
-          title: "Receitas",
+          title: "Despesas",
           backgroundColor: Colors.green,
         );
       } else {
@@ -54,7 +54,7 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
 
         exceptionFirebaseSnackBar(
           message: errorMessage,
-          title: "Receitas",
+          title: "Despesas",
           backgroundColor: Colors.red,
         );
       }
@@ -62,10 +62,10 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
   }
 
   @override
-  Future<dynamic> getAllReceitas() async {
+  Future<dynamic> getAllDespesas() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.0.247:8000/receitas/adicionar'),
+        Uri.parse('http://192.168.0.247:8000/despesas/adicionar'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -79,7 +79,7 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
 
         exceptionFirebaseSnackBar(
           message: errorMessage,
-          title: "Receitas",
+          title: "Despesas",
           backgroundColor: Colors.red,
         );
       }
@@ -87,16 +87,16 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
   }
 
   @override
-  Future<void> registerReceitas({required ReceitasModel receitasModel}) async {
+  Future<void> registerDespesas({required DespesasModel despesasModel}) async {
     try {
       final Map<String, dynamic> data = {
-        "nome": receitasModel.nome,
-        "categoria": receitasModel.categoria,
-        "valor": receitasModel.valor,
+        "nome": despesasModel.nome,
+        "categoria": despesasModel.categoria,
+        "valor": despesasModel.valor,
       };
 
       final response = await http.post(
-        Uri.parse('http://192.168.0.247:8000/receitas/adicionar'),
+        Uri.parse('http://192.168.0.247:8000/despesas/adicionar'),
         body: jsonEncode(data),
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
 
         exceptionFirebaseSnackBar(
           message: message,
-          title: "Receitas",
+          title: "Despesas",
           backgroundColor: Colors.green,
         );
         Get.back();
@@ -118,7 +118,7 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
 
         exceptionFirebaseSnackBar(
           message: errorMessage,
-          title: "Receitas",
+          title: "Despesas",
           backgroundColor: Colors.red,
         );
       }

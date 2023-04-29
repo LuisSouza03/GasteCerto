@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/models/receitas_model.dart';
+import '../../../domain/models/receitas_model.dart';
 
 abstract class ApiReceitasRepository {
   Future<void> registerReceitas({
