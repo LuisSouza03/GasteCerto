@@ -36,7 +36,7 @@ class _DespesasFormState extends State<DespesasForm> {
           children: [
             CustomTextField(
               icon: Icons.person,
-              label: "Nome da receita",
+              label: "Nome da despesa",
               textController: controller.nome,
               validator: (value) =>
                   validationFunctions.validateNotEmpty(value!),
@@ -51,7 +51,7 @@ class _DespesasFormState extends State<DespesasForm> {
             SizedBox(
               width: double.infinity,
               child: ButtonWidget(
-                  textButton: "Registrar",
+                  textButton: "Registrar Despesa",
                   onPress: () {
                     if (formKey.currentState!.validate()) {
                       var valor = controller.valor.text.trim();
@@ -114,7 +114,7 @@ class _ReceitasFormState extends State<ReceitasForm> {
             SizedBox(
               width: double.infinity,
               child: ButtonWidget(
-                  textButton: "Registrar",
+                  textButton: "Registrar Receita",
                   onPress: () {
                     if (formKey.currentState!.validate()) {
                       var valor = controller.valor.text.trim();
