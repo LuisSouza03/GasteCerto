@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.5
   http: ^0.13.5
   email_validator: ^2.1.17
+  flutter_slidable: ^3.0.0
 
 dev_dependencies:
   flutter_test:

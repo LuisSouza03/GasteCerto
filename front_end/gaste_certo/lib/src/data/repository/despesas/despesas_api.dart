@@ -33,14 +33,14 @@ class DespesasApi extends GetxController implements ApiDespesasRepository {
       };
 
       final response = await http.delete(
-        Uri.parse('http://192.168.0.247:8000/despesas/adicionar'),
+        Uri.parse('http://192.168.0.247:8000/despesas/remover'),
         body: jsonEncode(data),
         headers: {
           'Content-Type': 'application/json',
         },
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         var message = 'Receita deletada com sucesso';
 
         exceptionFirebaseSnackBar(

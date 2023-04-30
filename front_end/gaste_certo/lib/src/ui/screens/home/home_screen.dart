@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gaste_certo/src/ui/screens/login/login_screen.dart';
 import 'package:get/get.dart';
 
+import '../../../data/repository/despesas/despesas_api.dart';
 import '../../../data/repository/get_all_transactions.dart';
 import '../../../data/repository/receitas/receitas_api.dart';
 import '../../../domain/models/all_transactions_model.dart';
@@ -180,53 +182,76 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: transactions.length,
             itemBuilder: (context, index) {
               final transaction = transactions[index];
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                elevation: 2,
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: Material(
-                  borderRadius: BorderRadius.circular(10),
-                  color: transaction.type == 'Receitas'
-                      ? Colors.green
-                      : Colors.red,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(10),
-                    onTap: () {
-                      // Ação ao clicar no card
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            transaction.type!,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+              return SizedBox(
+                height: 130,
+                width: 400,
+                child: Slidable(
+                  key: const ValueKey(0),
+                  startActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      // A SlidableAction can have an icon and/or a label.
+                      SlidableAction(
+                        onPressed: (context) {
+                          doNothing(context, transaction);
+                        },
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      ),
+                    ],
+                  ),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 2,
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Material(
+                      borderRadius: BorderRadius.circular(10),
+                      color: transaction.type == 'Receitas'
+                          ? Colors.green
+                          : Colors.red,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          // Ação ao clicar no card
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                transaction.type!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                transaction.nome!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                transaction.valor.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            transaction.nome!,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            transaction.valor.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
@@ -242,4 +267,44 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+}
+
+void doNothing(BuildContext context, AllTransactions transaction) {
+  Get.lazyPut(() => ReceitasApi());
+  Get.lazyPut(() => DespesasApi());
+  Get.lazyPut(() => GetAllTransactions());
+  final controller = Get.find<GetAllTransactions>();
+  showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Deletar Card'),
+      content: const Text('Tem certeza que deseja deletar esse card?'),
+      actions: [
+        TextButton(
+          child: const Text('Cancelar'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: const Text('Deletar'),
+          onPressed: () {
+            if (transaction.type == 'Receitas') {
+              ReceitasApi.instance.deleteReceitas(
+                id: transaction.id!,
+              );
+            } else {
+              DespesasApi.instance.deleteDespesas(
+                id: transaction.id!,
+              );
+            }
+
+            Get.reloadAll();
+
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ),
+  );
 }

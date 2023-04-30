@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../domain/models/all_transactions_model.dart';
 import '../../utils/utils.dart';
 
-class GetAllTransactions {
+class GetAllTransactions extends GetxController {
   Future<List<AllTransactions>> getAll() async {
     try {
       final responseReceitas = await http.get(
