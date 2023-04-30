@@ -11,7 +11,7 @@ abstract class ApiReceitasRepository {
     required String id,
   });
 
-  Future<dynamic> getAllReceitas();
+  Future<List<dynamic>> getAllTransactions();
 
   Future<void> exceptionFirebaseSnackBar({
     required String message,

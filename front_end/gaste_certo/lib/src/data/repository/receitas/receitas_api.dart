@@ -62,19 +62,34 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
   }
 
   @override
-  Future<dynamic> getAllReceitas() async {
+  Future<List<dynamic>> getAllTransactions() async {
     try {
-      final response = await http.get(
+      final responseReceitas = await http.get(
         Uri.parse('http://192.168.0.247:8000/receitas/adicionar'),
         headers: {
           'Content-Type': 'application/json',
         },
       );
 
-      if (response.statusCode == 201) {
-        return response.body;
+      final responseDespesas = await http.get(
+        Uri.parse('http://192.168.0.247:8000/despesas/adicionar'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (responseReceitas.statusCode == 201 &&
+          responseDespesas.statusCode == 201) {
+        var allTransactions = [];
+        Map<String, dynamic> receitas = jsonDecode(responseReceitas.body);
+        Map<String, dynamic> despesas = jsonDecode(responseDespesas.body);
+
+        allTransactions.addAll(receitas as Iterable);
+        allTransactions.addAll(despesas as Iterable);
+
+        return allTransactions;
       } else {
-        Map<String, dynamic> message = jsonDecode(response.body);
+        Map<String, dynamic> message = jsonDecode(responseReceitas.body);
         var errorMessage = message['message'];
 
         exceptionFirebaseSnackBar(
@@ -82,8 +97,11 @@ class ReceitasApi extends GetxController implements ApiReceitasRepository {
           title: "Receitas",
           backgroundColor: Colors.red,
         );
+        return [];
       }
-    } catch (e) {}
+    } catch (e) {
+      return [];
+    }
   }
 
   @override

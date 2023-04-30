@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:gaste_certo/src/ui/screens/login/login_screen.dart';
 import 'package:get/get.dart';
 
+import '../../../data/repository/get_all_transactions.dart';
+import '../../../data/repository/receitas/receitas_api.dart';
+import '../../../domain/models/all_transactions_model.dart';
 import '../addScreen/abas_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,10 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    final receitasApi = Get.lazyPut(() => ReceitasApi());
+
     return Scaffold(
       body: SingleChildScrollView(
-        primary: false,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Stack(
@@ -151,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
+            getTransactions(),
             TextButton(
               onPressed: () => Get.to(() => const LoginAccountScreen()),
               child: const Text(
@@ -161,6 +166,80 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  FutureBuilder<List<AllTransactions>> getTransactions() {
+    return FutureBuilder<List<AllTransactions>>(
+      future: GetAllTransactions().getAll(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final transactions = snapshot.data!;
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: transactions.length,
+            itemBuilder: (context, index) {
+              final transaction = transactions[index];
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 2,
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Material(
+                  borderRadius: BorderRadius.circular(10),
+                  color: transaction.type == 'Receitas'
+                      ? Colors.green
+                      : Colors.red,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () {
+                      // Ação ao clicar no card
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            transaction.type!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            transaction.nome!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            transaction.valor.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return const Text('Erro ao carregar transações');
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }
