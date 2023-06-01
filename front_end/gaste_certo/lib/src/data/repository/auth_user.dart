@@ -6,11 +6,10 @@ import 'package:gaste_certo/src/domain/models/user_model.dart';
 import 'package:gaste_certo/src/ui/screens/login/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../../ui/screens/home/home_screen.dart';
+import '../../ui/screens/bottomScreen/bottom_bar.dart';
 import '../../utils/utils.dart';
 
-class AuthenticationRepository extends GetxController
-    implements ApiAuthRepository {
+class AuthenticationRepository extends GetxController implements ApiAuthRepository {
   static AuthenticationRepository get instance => Get.find();
   @override
   Future<void> loginUser({
@@ -32,7 +31,7 @@ class AuthenticationRepository extends GetxController
       );
 
       if (response.statusCode == 201) {
-        Get.offAll(() => const HomeScreen());
+        Get.offAll(() => const BottomNavigationBarScreen());
       } else {
         Map<String, dynamic> message = jsonDecode(response.body);
         var errorMessage = message['message'];
@@ -51,11 +50,7 @@ class AuthenticationRepository extends GetxController
     required RegisterAccountModel registerModel,
   }) async {
     try {
-      final Map<String, String> data = {
-        "nome": registerModel.name,
-        "email": registerModel.email,
-        "password": registerModel.password
-      };
+      final Map<String, String> data = {"nome": registerModel.name, "email": registerModel.email, "password": registerModel.password};
 
       final response = await http.post(
         Uri.parse('http://192.168.0.247:8000/auth/cadastrar'),
@@ -79,10 +74,7 @@ class AuthenticationRepository extends GetxController
   }
 
   @override
-  Future<void> exceptionFirebaseSnackBar(
-      {required String message,
-      required String title,
-      required Color backgroundColor}) async {
+  Future<void> exceptionFirebaseSnackBar({required String message, required String title, required Color backgroundColor}) async {
     Utils().showSnackBar(
       title: title,
       message: message,
