@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:gaste_certo/src/ui/screens/login/login_screen.dart';
 import 'package:get/get.dart';
 
 import '../../../data/repository/despesas/despesas_api.dart';
@@ -28,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    final receitasApi = Get.lazyPut(() => ReceitasApi());
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -59,8 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   left: width * 0.07,
                   child: Text(
                     "GasteCerto",
-                    style:
-                        TextStyle(color: Colors.white, fontSize: width * 0.074),
+                    style: TextStyle(color: Colors.white, fontSize: width * 0.074),
                   ),
                 ),
                 Positioned(
@@ -73,9 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(blurRadius: 5, offset: Offset(0, 2))
-                      ],
+                      boxShadow: const [BoxShadow(blurRadius: 5, offset: Offset(0, 2))],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -90,28 +85,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Text(
                             "Total",
-                            style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: width * 0.05),
+                            style: TextStyle(color: Colors.grey[600], fontSize: width * 0.05),
                           ),
                         ),
                         FutureBuilder<double>(
                           future: GetAllTransactions().getTotal(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<double> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
                               return const CircularProgressIndicator();
                             }
 
                             if (snapshot.hasError) {
-                              return Text(
-                                  'Erro ao obter o total: ${snapshot.error}');
+                              return Text('Erro ao obter o total: ${snapshot.error}');
                             }
 
                             final total = snapshot.data;
-                            final textColor =
-                                total! < 0 ? Colors.red : Colors.black;
+                            final textColor = total! < 0 ? Colors.red : Colors.black;
 
                             return Padding(
                               padding: EdgeInsets.only(
@@ -192,13 +181,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             getTransactions(),
-            TextButton(
-              onPressed: () => Get.to(() => const LoginAccountScreen()),
-              child: const Text(
-                "sair",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
           ],
         ),
       ),
@@ -239,13 +221,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     elevation: 2,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: Material(
                       borderRadius: BorderRadius.circular(10),
-                      color: transaction.type == 'Receitas'
-                          ? Colors.green
-                          : Colors.red,
+                      color: transaction.type == 'Receitas' ? Colors.green : Colors.red,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
@@ -259,10 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Row(
                                 children: [
                                   Icon(
-                                    transaction.type == 'Receitas'
-                                        ? Icons.keyboard_double_arrow_up_rounded
-                                        : Icons
-                                            .keyboard_double_arrow_down_rounded,
+                                    transaction.type == 'Receitas' ? Icons.keyboard_double_arrow_up_rounded : Icons.keyboard_double_arrow_down_rounded,
                                     color: Colors.white,
                                   ),
                                   Text(
