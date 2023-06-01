@@ -62,6 +62,22 @@ class GetAllTransactions extends GetxController {
     }
   }
 
+  Future<double> getTotal() async {
+    double total = 0;
+
+    List<AllTransactions> allTransactions = await getAll();
+
+    for (var transaction in allTransactions) {
+      if (transaction.type == 'Receitas') {
+        total += transaction.valor!;
+      } else if (transaction.type == 'Despesas') {
+        total -= transaction.valor!;
+      }
+    }
+
+    return total;
+  }
+
   @override
   Future<void> exceptionFirebaseSnackBar(
       {required String message,

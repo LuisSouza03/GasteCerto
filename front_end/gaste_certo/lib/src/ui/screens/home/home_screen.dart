@@ -95,6 +95,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontSize: width * 0.05),
                           ),
                         ),
+                        FutureBuilder<double>(
+                          future: GetAllTransactions().getTotal(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<double> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            if (snapshot.hasError) {
+                              return Text(
+                                  'Erro ao obter o total: ${snapshot.error}');
+                            }
+
+                            final total = snapshot.data;
+                            final textColor =
+                                total! < 0 ? Colors.red : Colors.black;
+
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                left: width * 0.05,
+                                top: 5,
+                              ),
+                              child: Text(
+                                'R\$${total.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: width * 0.05,
+                                  color: textColor,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,13 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
         if (snapshot.hasData) {
           final transactions = snapshot.data!;
           return ListView.builder(
-            shrinkWrap: true,
             itemCount: transactions.length,
+            shrinkWrap: true,
             itemBuilder: (context, index) {
               final transaction = transactions[index];
               return SizedBox(
-                height: 130,
-                width: 400,
                 child: Slidable(
                   key: const ValueKey(0),
                   startActionPane: ActionPane(
@@ -224,13 +256,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                transaction.type!,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    transaction.type == 'Receitas'
+                                        ? Icons.keyboard_double_arrow_up_rounded
+                                        : Icons
+                                            .keyboard_double_arrow_down_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Text(
+                                    transaction.type!,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -242,8 +285,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.category,
+                                    color: Colors.white,
+                                    size: 12,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    transaction.categoria!,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
                               Text(
-                                transaction.valor.toString(),
+                                'R\$${transaction.valor!.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,

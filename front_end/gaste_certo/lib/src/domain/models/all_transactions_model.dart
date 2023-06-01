@@ -2,9 +2,9 @@ class AllTransactions {
   String? id;
   String? nome;
   String? categoria;
-  double? valor;
+  dynamic? valor;
   String? data;
-  int? iV;
+  dynamic? iV;
   String? type;
 
   AllTransactions({

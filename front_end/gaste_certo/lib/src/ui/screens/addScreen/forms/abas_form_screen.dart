@@ -48,6 +48,13 @@ class _DespesasFormState extends State<DespesasForm> {
               validator: (value) =>
                   validationFunctions.validateNotEmpty(value!),
             ),
+            CustomTextField(
+              icon: Icons.category,
+              label: "Categoria",
+              textController: controller.categoria,
+              validator: (value) =>
+                  validationFunctions.validateNotEmpty(value!),
+            ),
             SizedBox(
               width: double.infinity,
               child: ButtonWidget(
@@ -58,7 +65,7 @@ class _DespesasFormState extends State<DespesasForm> {
                       final DespesasModel despesa = DespesasModel(
                         nome: controller.nome.text.trim(),
                         valor: double.parse(valor),
-                        categoria: '',
+                        categoria: controller.categoria.text.trim(),
                       );
 
                       DespesasApi.instance.registerDespesas(
@@ -111,6 +118,13 @@ class _ReceitasFormState extends State<ReceitasForm> {
               validator: (value) =>
                   validationFunctions.validateNotEmpty(value!),
             ),
+            CustomTextField(
+              icon: Icons.category,
+              label: "Categoria",
+              textController: controller.categoria,
+              validator: (value) =>
+                  validationFunctions.validateNotEmpty(value!),
+            ),
             SizedBox(
               width: double.infinity,
               child: ButtonWidget(
@@ -121,7 +135,7 @@ class _ReceitasFormState extends State<ReceitasForm> {
                       final ReceitasModel receita = ReceitasModel(
                         nome: controller.nome.text.trim(),
                         valor: double.parse(valor),
-                        categoria: '',
+                        categoria: controller.categoria.text.trim(),
                       );
 
                       ReceitasApi.instance.registerReceitas(
